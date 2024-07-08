@@ -1,0 +1,131 @@
+CREATE TABLE Country (
+   country_id serial PRIMARY KEY,
+   country_name character varying(100) NOT NULL);
+ 
+
+
+
+CREATE TABLE City (
+   city_id serial PRIMARY KEY,
+	country_id int NOT NULL 
+	REFERENCES Country (country_id),
+   city_name character varying(100) NOT NULL);
+
+
+
+
+CREATE TABLE Missions (
+   mission_id serial PRIMARY KEY,
+	mission_title character varying(100),
+	mission_description character varying(400),
+	mission_org_name character varying(100),
+	mission_org_detail character varying(400),
+	country_id int NOT NULL 
+	REFERENCES Country (country_id),
+	city_id int NOT NULL 
+	REFERENCES City (city_id),
+	start_date timestamp with time zone 
+	NOT NULL DEFAULT now(),
+	end_date timestamp with time zone,
+	mission_type character varying(100),
+	total_sheets int NOT NULL,
+	registration_deadline timestamp with time zone,
+	mission_images character varying(200),
+	mission_documents character varying(200),
+	mission_availability character varying(200),
+	mission_video_url character varying(200)
+	);
+
+
+
+
+CREATE TABLE Mission_Application (
+   mission_app_id serial PRIMARY KEY,
+	mission_id int NOT NULL 
+	REFERENCES Missions (mission_id),
+	applied_date timestamp with time zone NOT NULL DEFAULT now(),
+	status boolean,
+	sheets int NOT NULL
+	);
+
+
+
+
+
+CREATE TABLE Mission_Skill (
+   mission_skill_id int PRIMARY KEY,
+	skill_name character varying(100),
+	status character varying(100)	
+	);
+
+
+
+
+
+CREATE TABLE Mission_Theme (
+   mission_theme_id int PRIMARY KEY,
+	theme_name character varying(100),
+	status character varying(100)	
+	);
+
+
+
+
+
+CREATE TABLE Users (
+   user_id int PRIMARY KEY,
+	first_name character varying(100) NOT NULL,
+	last_name character varying(100) NOT NULL,
+	phone_number character varying(100) UNIQUE NOT NULL,
+	email_address character varying(250) UNIQUE NOT NULL,
+	user_type character varying(100) NOT NULL,
+	password character varying(100) NOT NULL
+	);
+
+
+
+
+
+CREATE TABLE User_Detail (
+   user_detail_id int PRIMARY KEY,
+	user_id int NOT NULL REFERENCES Users(user_id),
+	name character varying(100) NOT NULL,
+	surname character varying(100) NOT NULL,
+	employee_id character varying(100) UNIQUE NOT NULL,
+	manager character varying(100) NOT NULL,
+	title character varying(100) NOT NULL,
+	department character varying(100) NOT NULL,
+	my_profile character varying(500) NOT NULL,
+	whyIvolunteer character varying(500) NOT NULL,
+	country_id int NOT NULL REFERENCES Country(country_id),
+	city_id int NOT NULL REFERENCES City(city_id),
+	availability character varying(100) NOT NULL,
+	linkdInUrl character varying(300) NOT NULL,
+	my_skills character varying(500) NOT NULL,
+	user_image character varying(500) NOT NULL,
+	status boolean
+	
+	);
+
+
+
+
+
+CREATE TABLE User_Skills (
+   user_skill_id int PRIMARY KEY,
+	user_id int NOT NULL REFERENCES Users(user_id),
+	skill character varying(300) NOT NULL
+	);
+
+
+
+
+alter table Mission_Application add column user_id int references Users(user_id);
+
+
+
+alter table Missions add column mission_theme_id int references Mission_Theme(mission_theme_id);
+
+
+
+alter table Missions add column mission_skill_id int references Mission_Skill(mission_skill_id);

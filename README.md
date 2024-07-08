@@ -1,4 +1,4 @@
-# Day2-TatvaSoft-Summer-Internship-PostgreSQL
+# PostgreSQL(01/07/2024)
 
 This repository contains the tasks of Day2 Summer Internship at TatvaSoft(2024)
 <br></br>
